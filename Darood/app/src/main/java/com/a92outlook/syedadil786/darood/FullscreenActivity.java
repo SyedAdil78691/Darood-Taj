@@ -1,10 +1,11 @@
 package com.a92outlook.syedadil786.darood;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -20,7 +22,8 @@ import android.widget.ImageView;
 public class FullscreenActivity extends AppCompatActivity {
 
 
-    int [] mResources = {
+    static int [] mResources = {
+            R.drawable.startup,
             R.drawable.darood1,
             R.drawable.darood2,
             R.drawable.darood3
@@ -32,6 +35,25 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen);
+
+        if ((getResources().getConfiguration().screenLayout &      Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+            Toast.makeText(this, "Large screen",Toast.LENGTH_LONG).show();
+            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        }
+        else if ((getResources().getConfiguration().screenLayout &      Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            Toast.makeText(this, "Normal sized screen" , Toast.LENGTH_LONG).show();
+            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        }
+        else if ((getResources().getConfiguration().screenLayout &      Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+            Toast.makeText(this, "Small sized screen" , Toast.LENGTH_LONG).show();
+            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        else {
+            Toast.makeText(this, "Screen size is neither large, normal or small" , Toast.LENGTH_LONG).show();
+        }
+
         mAdapter = new MyFragmentAdapter(getSupportFragmentManager());
         mPager = (ViewPager)findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
@@ -72,17 +94,17 @@ public class FullscreenActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt("page_position", position);
 
-            // Set the arguments on the fragment that will be fetched in DemoFragment@onCreateView
+            // Set the arguments on the fragment that will be fetched in DataFragment@onCreateView
             fragment.setArguments(args);
             return fragment;
         }
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
 
-    public class DataFragment extends Fragment {
+    public static class DataFragment extends Fragment {
 
         public DataFragment(){
 
